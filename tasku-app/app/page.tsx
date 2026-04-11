@@ -15,15 +15,17 @@ export default function Top(){
 
 
     <div>
-      <h2>タスク名：{taskName||"タスク名が入力されてません。"}</h2>
+      <h2>プロジェクト名：{taskName||"プロジェクト名が入力されてません。"}</h2>
       <input 
       type="text" 
-      placeholder="タスク名を入力してください。" 
+      placeholder="pj名の変更" 
       value={taskName} 
       onChange={(i)=> setTaskName(i.target.value)} 
       />
 
       <p>タスク進捗度：{progress}%</p>
+      {progress ===100 ? "全て完了": ""}
+      
     </div>
 
 
