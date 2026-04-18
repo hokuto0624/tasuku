@@ -1,35 +1,83 @@
 "use client";
 import style from "./page.module.css";
-import { Analytics } from "@vercel/analytics/next"
+// import { Analytics } from "@vercel/analytics/next"
 import { useState, useEffect } from "react";
 import Pjname from "@/components/pj_name";
 import Progress from "@/components/progress"
 
+
+
 export default function Top(){
-  const [projectName, setProjectName] = useState("");
   const [taskName, setTaskName] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+useEffect(() => {
+  const saved = localStorage.getItem("tasks");
+  if (saved) {
+    setTasks(JSON.parse(saved));
+  } else {
+    setTasks([
+      { id: 1, text: "タスクA", status: "todo" },
+      { id: 2, text: "タスクB", status: "todo" }
+    ]);
+  }
+}, []);
 
 
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "タスクA", status: "todo" },
-    { id: 2, text: "タスクB", status: "todo" }
-  ]);
 
-  // 未完了 → 実行中
-  const startTask = (id) => {
-    setTasks(prev =>
-  prev.map(task =>
-    task.id === id ? { ...task, status: "running" } : task
-  )
-);
-  };
-  // 実行中 → 完了
-  const completeTask = (id) => {
-  setTasks(prev =>
+  useEffect(() => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}, [tasks]);
+
+
+
+const [projectName, setProjectName] = useState("");
+
+//読み込み 
+useEffect(() => {
+  const saved = localStorage.getItem("projectName");
+  if (saved) setProjectName(saved);
+}, []);
+
+// 保存
+useEffect(() => {
+  localStorage.setItem("projectName", projectName);
+}, [projectName]);
+
+
+
+
+//   // 未完了 → 実行中
+//   const startTask = (id) => {
+//       setTasks(prev =>
+//       prev.map(task =>
+//       task.id === id ? { ...task, status: "running" } : task
+//   )
+// );
+//   };
+//   // 実行中 → 完了
+//   const completeTask = (id) => {
+//   setTasks(prev =>
+//     prev.map(task =>
+//       task.id === id ? { ...task, status: "done" } : task
+//     )
+//   );
+// };
+
+const startTask = (id) => {
+  setTasks(prev => (
+    prev.map(task =>
+      task.id === id ? { ...task, status: "running" } : task
+    )
+  ));
+};
+
+const completeTask = (id) => {
+  setTasks(prev => (
     prev.map(task =>
       task.id === id ? { ...task, status: "done" } : task
     )
-  );
+  ));
 };
 
   const todoTasks = tasks.filter(t => t.status === "todo");
@@ -67,7 +115,7 @@ const progress = totalTasks === 0
 
 
     <div>
-     {/* プロジェクト名入力*/}
+     {/* プロジェクト名入力 */}
       <Pjname name={projectName} />
       <input 
       type="text" 
