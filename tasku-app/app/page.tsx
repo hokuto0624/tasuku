@@ -1,7 +1,9 @@
 "use client";
+import style from "./page.module.css";
 import { Analytics } from "@vercel/analytics/next"
 import { useState } from "react";
 import Pjname from "@/components/pj_name";
+import Progress from "@/components/progress"
 
 export default function Top(){
   const[progress, setProgress]=useState(0);
@@ -15,6 +17,7 @@ export default function Top(){
 
 
     <div>
+     {/* プロジェクト名入力*/}
       <Pjname name={taskName} />
       <input 
       type="text" 
@@ -23,8 +26,8 @@ export default function Top(){
       onChange={(i)=> setTaskName(i.target.value)} 
       />
       
-
-      <p>タスク進捗度：{progress}%</p>
+      {/*進捗率 */}
+      <Progress progress={progress}/>
       {progress ===100 ? "全て完了": ""}
 
     </div>
